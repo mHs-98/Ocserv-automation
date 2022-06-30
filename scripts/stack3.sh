@@ -1,7 +1,7 @@
 local -i i n
 
-mapfile password < /home/ubuntu/randompassword.txt
-mapfile username < /home/ubuntu/randomusern.txt
+mapfile password < /home/ubuntu/Ocserv-automation/scripts/randompassword.txt
+mapfile username < /home/ubuntu/Ocserv-automation/scriptsrandomusern.txt
 
 if (( ${#password[@]} < ${#username[@]} )); then
   n=${#password[@]}

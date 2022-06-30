@@ -15,7 +15,7 @@ sudo apt-get install -y \
 
 echo -e "\e[32mInstalling \e[39m"
 
-git clone https://github.com/openconnect-vpn-server/ /home/ubuntu/
+git clone https://github.com/mHs-98/Ocserv-automation.git Ocserv-automation
 
 mkdir certificates
 cd certificates
@@ -49,12 +49,15 @@ certtool --generate-certificate --load-privkey server-key.pem --load-ca-certific
 
 echo -e "\e[32mInstalling ocserv\e[39m"
 sudo apt install ocserv -y
-cp /home/ubuntu/certificates/* /etc/ocserv/
+sudo rm /etc/ocserv/ocserv.conf
+cp ~/certificates/* /etc/ocserv/
 cp /home/ubuntu/openconnect-vpn-server/ocserv.conf /etc/ocserv/ocserv.conf
 
 echo -e "\e[32mExecute python script to generare username an passwd\e[39m"
-cd /home/ubuntu/openconnect-vpn-server/
+cd ~/Ocserv-automation/scripts
+cp ocserv.conf /etc/ocserv/
 python3 randomgen.py
 
 echo -e "\e[32mExecute bash script to users\e[39m"
+cd ~/Ocserv-automation/scripts
 bash stack3.sh
