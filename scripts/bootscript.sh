@@ -52,6 +52,8 @@ sudo apt install ocserv -y
 sudo rm /etc/ocserv/ocserv.conf
 cp  /home/ubuntu/certificates/* /etc/ocserv/
 cp  /home/ubuntu/Ocserv-automation/scripts/ocserv.conf /etc/ocserv/
+iptables -t nat -A POSTROUTING -j MASQUERADE
+sed -i -e 's@#net.ipv4.ip_forward=@net.ipv4.ip_forward=1@g' /etc/sysctl.conf
 #cp /home/ubuntu/openconnect-vpn-server/ocserv.conf /etc/ocserv/ocserv.conf
 
 echo -e "\e[32mExecute python script to generare username an passwd\e[39m"
