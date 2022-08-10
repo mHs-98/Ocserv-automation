@@ -1,7 +1,7 @@
 local -i i n
 
-mapfile password < /tmp/randompassword.txt
-mapfile username < /tmp/randomusern.txt
+mapfile password < /tmp/randompassw.txt
+mapfile username < /tmp/randomuser.txt
 
 if (( ${#password[@]} < ${#username[@]} )); then
   n=${#password[@]}
