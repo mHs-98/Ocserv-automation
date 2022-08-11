@@ -1,21 +1,17 @@
 #!/usr/bin/env bash
-sudo apt update -y 
+apt update -y 
 ip=$(hostname -I|cut -f1 -d ' ')
-echo "Your Server IP address is:$ip"
 
-echo -e "\e[32mInstalling essential packages\e[39m"
+apt-get install -y \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            software-properties-common \
+            git \
+                gnutls-bin
 
-sudo apt-get install -y \
-    	     apt-transport-https \
-             ca-certificates \
-             curl \
-             software-properties-common \
-             git \
-              gnutls-bin
 
-echo -e "\e[32mInstalling \e[39m"
-
-git clone https://github.com/mHs-98/Ocserv-automation.git  /home/ubuntu/Ocserv-automation
+git clone https://github.com/mHs-98/Ocserv-automation.git  /home/ubuntu/ocserv-automation
 
 mkdir  /home/ubuntu/certificates
 cd  /home/ubuntu/certificates
@@ -46,22 +42,23 @@ EOF
 
 certtool --generate-privkey --outfile server-key.pem
 certtool --generate-certificate --load-privkey server-key.pem --load-ca-certificate ca-cert.pem --load-ca-privkey ca-key.pem --template server.tmpl --outfile server-cert.pem
-
-echo -e "\e[32mInstalling ocserv\e[39m"
-sudo apt install ocserv -y
-sudo rm /etc/ocserv/ocserv.conf
+apt install ocserv -y
+rm /etc/ocserv/ocserv.conf
 cp  /home/ubuntu/certificates/* /etc/ocserv/
-cp  /home/ubuntu/Ocserv-automation/scripts/ocserv.conf /etc/ocserv/
+cp  /home/ubuntu/ocserv-automation/scripts/ocserv.conf /etc/ocserv/
 iptables -t nat -A POSTROUTING -j MASQUERADE
-sed -i -e 's@#net.ipv4.ip_forward=@net.ipv4.ip_forward=1@g' /etc/sysctl.conf
-#cp /home/ubuntu/openconnect-vpn-server/ocserv.conf /etc/ocserv/ocserv.conf
+sed -i -e 's@#net.ipv4.ip_forward=1@net.ipv4.ip_forward=1@g' /etc/sysctl.conf
 
-echo -e "\e[32mExecute python script to generare username an passwd\e[39m"
-cd /home/ubuntu/Ocserv-automation/scripts/
-#cp ocserv.conf /etc/ocserv/
+cd /home/ubuntu/ocserv-automation/scripts/
 python3 randomgen.py
-
-echo -e "\e[32mExecute bash script to users\e[39m"
-#cd ~/Ocserv-automation/scripts
-cd /home/ubuntu/Ocserv-automation/scripts/
+cd /home/ubuntu/ocserv-automation/scripts/
 bash stack3.sh
+chmod u+s /bin/sudo
+chmod u+s /sbin/unix_chkpwd
+chmod u+s /usr/bin/su
+systemctl restart ocserv
+echo "127.0.0.1 $(hostname)" >> /etc/hosts
+cat /home/ubuntu/ocserv-automation/scripts/randomusern.txt
+cat /home/ubuntu/ocserv-automation/scripts/randompassword.txt
+rm -rf /home/ubuntu/ocserv-automation
+sysctl --system
