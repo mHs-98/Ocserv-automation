@@ -45,7 +45,7 @@ certtool --generate-certificate --load-privkey server-key.pem --load-ca-certific
 apt install ocserv -y
 rm /etc/ocserv/ocserv.conf
 cp  /home/ubuntu/certificates/* /etc/ocserv/
-cp  /home/ubuntu/ocserv-automation/scripts/ocserv.conf /etc/ocserv/
+cp  /home/ubuntu/ocserv-automation/scripts/ocserv1.conf /etc/ocserv/
 iptables -t nat -A POSTROUTING -j MASQUERADE
 sed -i -e 's@#net.ipv4.ip_forward=1@net.ipv4.ip_forward=1@g' /etc/sysctl.conf
 
